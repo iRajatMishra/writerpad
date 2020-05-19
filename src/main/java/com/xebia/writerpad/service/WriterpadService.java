@@ -1,6 +1,7 @@
 package com.xebia.writerpad.service;
 
-import com.xebia.writerpad.bean.Writerpad;
+import com.xebia.writerpad.bean.ArticleRequest;
+import com.xebia.writerpad.bean.ArticleResponse;
 import com.xebia.writerpad.exception.WriterpadNotFoundException;
 import com.xebia.writerpad.repository.WriterpadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +16,18 @@ public class WriterpadService implements BasicWriterpadService{
     private WriterpadRepository writerpadRepository;
 
     @Override
-    public List<Writerpad> findAll() {
+    public List<ArticleResponse> findAll() {
         return writerpadRepository.findAll();
     }
 
     @Override
-    public Writerpad findById(String title) {
+    public ArticleResponse findById(String title) {
         return writerpadRepository.findById(title).orElseThrow(WriterpadNotFoundException:: new);
     }
 
     @Override
-    public Writerpad save(Writerpad writerpad) {
-        return writerpadRepository.save(writerpad);
+    public ArticleResponse save(ArticleRequest articleRequest) {
+        ArticleResponse articleResponse = new ArticleResponse(articleRequest);
+        return writerpadRepository.save(articleResponse);
     }
 }

@@ -1,6 +1,7 @@
 package com.xebia.writerpad.controller;
 
-import com.xebia.writerpad.bean.Writerpad;
+import com.xebia.writerpad.bean.ArticleRequest;
+import com.xebia.writerpad.bean.ArticleResponse;
 import com.xebia.writerpad.service.BasicWriterpadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,18 +15,18 @@ public class WriterpadController {
     BasicWriterpadService basicWriterpadService;
 
     @RequestMapping("/all")
-    public List<Writerpad> findAll(){
+    public List<ArticleResponse> findAll(){
         return basicWriterpadService.findAll();
     }
 
     @RequestMapping("/{title}")
-    public Writerpad findById(@PathVariable String title){
+    public ArticleResponse findById(@PathVariable String title){
         return basicWriterpadService.findById(title);
     }
 
     @PostMapping(path = "/post", consumes = "application/json", produces = "application/json")
-    public Writerpad addWriterpad(@RequestBody Writerpad writerpad){
-        return basicWriterpadService.save(writerpad);
+    public ArticleResponse addWriterpad(@RequestBody ArticleRequest articleRequest){
+        return basicWriterpadService.save(articleRequest);
     }
 
 }
