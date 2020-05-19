@@ -41,7 +41,7 @@ class WriterpadControllerTest {
                         "    ]\n" +
                         "}");
         mockMvc.perform(request)
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
     }
 

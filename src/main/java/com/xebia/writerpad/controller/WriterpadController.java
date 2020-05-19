@@ -4,6 +4,7 @@ import com.xebia.writerpad.bean.ArticleRequest;
 import com.xebia.writerpad.bean.ArticleResponse;
 import com.xebia.writerpad.service.BasicWriterpadService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class WriterpadController {
         return basicWriterpadService.findById(title);
     }
 
+    @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping(path = "/post", consumes = "application/json", produces = "application/json")
     public ArticleResponse addWriterpad(@RequestBody ArticleRequest articleRequest){
         return basicWriterpadService.save(articleRequest);
