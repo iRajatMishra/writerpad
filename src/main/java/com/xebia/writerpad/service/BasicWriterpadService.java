@@ -8,7 +8,9 @@ import java.util.List;
 public interface BasicWriterpadService {
 
     public List<ArticleResponse> findAll();
-    public ArticleResponse findById(String title);
+    public ArticleResponse findById(String slug);
     public ArticleResponse save(ArticleRequest articleRequest);
+    public void deleteById(String slug);
+    public ArticleResponse updateById(ArticleRequest articleRequest, String slug);
 
 }

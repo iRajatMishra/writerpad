@@ -29,7 +29,7 @@ class WriterpadControllerTest {
     @Test
     public void shouldSaveWithOKStatus() throws Exception {
         RequestBuilder request = MockMvcRequestBuilders.post(
-                "/post").contentType(MediaType.APPLICATION_JSON)
+                "/api/articles").contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
                         "    \"title\": \"How to learn Spring Boot\",\n" +
                         "    \"description\": \"Ever wonder how?\",\n" +

@@ -4,11 +4,14 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "articles")
 public class ArticleResponse {
 
+    @Column(nullable = false)
+    UUID id;
     @Id
     @Column(nullable = false, unique = true)
     private String slug;
@@ -30,6 +33,7 @@ public class ArticleResponse {
     int favoritesCount;
 
     public ArticleResponse(ArticleRequest articleRequest) {
+        this.id = UUID.randomUUID();
         this.title = articleRequest.getTitle();
         this.description = articleRequest.getDescription();
         this.body = articleRequest.getBody();
@@ -52,6 +56,10 @@ public class ArticleResponse {
             i++;
         }
         return temp;
+    }
+
+    public UUID getId(){
+        return id;
     }
 
     public String getSlug() {
@@ -90,12 +98,37 @@ public class ArticleResponse {
         return favoritesCount;
     }
 
+    public void setSlug() {
+        this.slug = this.title.toLowerCase().replace(' ', '-');
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+        setSlug();
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public void setTags(String[] tags) {
+        this.tags = designTags(tags);
+    }
+
+    public void setUpdatedAt() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ArticleResponse that = (ArticleResponse) o;
-        return favorite == Objects.equals(slug, that.slug);
+        return  Objects.equals(id, that.id);
     }
 
     @Override
@@ -108,14 +141,15 @@ public class ArticleResponse {
     @Override
     public String toString() {
         return "ArticleResponse{" +
-                "slug='" + slug + '\'' +
+                "id=" + id +
+                ", slug='" + slug + '\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", body='" + body + '\'' +
                 ", tags=" + Arrays.toString(tags) +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
-                ", favorited=" + favorite +
+                ", favorite=" + favorite +
                 ", favoritesCount=" + favoritesCount +
                 '}';
     }

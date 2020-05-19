@@ -15,20 +15,31 @@ public class WriterpadController {
     @Autowired
     BasicWriterpadService basicWriterpadService;
 
-    @RequestMapping("/all")
+    @RequestMapping("/api/articles")
     public List<ArticleResponse> findAll(){
         return basicWriterpadService.findAll();
     }
 
-    @RequestMapping("/{title}")
-    public ArticleResponse findById(@PathVariable String title){
-        return basicWriterpadService.findById(title);
+    @RequestMapping("/api/articles/{slug}")
+    public ArticleResponse findById(@PathVariable String slug){
+        return basicWriterpadService.findById(slug);
     }
 
     @ResponseStatus(value = HttpStatus.CREATED)
-    @PostMapping(path = "/post", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "/api/articles", consumes = "application/json", produces = "application/json")
     public ArticleResponse addWriterpad(@RequestBody ArticleRequest articleRequest){
         return basicWriterpadService.save(articleRequest);
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/api/articles/{slug}")
+    public String deleteById(@PathVariable String slug){
+        basicWriterpadService.deleteById(slug);
+        return "The article has been successfully deleted";
+    }
+
+    @RequestMapping(method = RequestMethod.PATCH, value = "/api/articles/{slug}")
+    public ArticleResponse updateById(@RequestBody ArticleRequest articleRequest,@PathVariable String slug){
+        return basicWriterpadService.updateById(articleRequest, slug);
     }
 
 }
