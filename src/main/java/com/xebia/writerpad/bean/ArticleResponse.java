@@ -10,9 +10,9 @@ import java.util.UUID;
 @Table(name = "articles")
 public class ArticleResponse {
 
+    @Id
     @Column(nullable = false)
     UUID id;
-    @Id
     @Column(nullable = false, unique = true)
     private String slug;
     @Column(nullable = false)
@@ -31,6 +31,8 @@ public class ArticleResponse {
     boolean favorite;
     @Column(nullable = false)
     int favoritesCount;
+    @Column(nullable = false)
+    String status;
 
     public ArticleResponse(ArticleRequest articleRequest) {
         this.id = UUID.randomUUID();
@@ -38,11 +40,12 @@ public class ArticleResponse {
         this.description = articleRequest.getDescription();
         this.body = articleRequest.getBody();
         this.tags = designTags(articleRequest.getTags());
-        this.slug = articleRequest.getTitle().toLowerCase().replace(' ', '-');
+        this.slug = articleRequest.getTitle().toLowerCase().replace(' ', '-')+id;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
         this.favorite = false;
         this.favoritesCount = 0;
+        this.status = "DRAFT";
     }
 
     public ArticleResponse() {
@@ -98,8 +101,12 @@ public class ArticleResponse {
         return favoritesCount;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
     public void setSlug() {
-        this.slug = this.title.toLowerCase().replace(' ', '-');
+        this.slug = this.title.toLowerCase().replace(' ', '-')+this.id;
     }
 
     public void setTitle(String title) {
@@ -121,6 +128,10 @@ public class ArticleResponse {
 
     public void setUpdatedAt() {
         this.updatedAt = LocalDateTime.now();
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override

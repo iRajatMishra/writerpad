@@ -26,8 +26,8 @@ public class WriterpadService implements BasicWriterpadService{
     }
 
     @Override
-    public ArticleResponse findById(String slug) {
-        return writerpadRepository.findById(slug).orElseThrow(WriterpadNotFoundException:: new);
+    public ArticleResponse findBySlug(String slug) {
+        return writerpadRepository.findBySlug(slug);
     }
 
     @Override
@@ -37,13 +37,13 @@ public class WriterpadService implements BasicWriterpadService{
     }
 
     @Override
-    public void deleteById(String slug) {
-        writerpadRepository.deleteById(slug);
+    public void deleteBySlug(String slug) {
+        writerpadRepository.deleteBySlug(slug);
     }
 
-    public ArticleResponse updateById(ArticleRequest articleRequest, String slug){
-        ArticleResponse articleResponse = findById(slug);
-        deleteById(slug);
+    public ArticleResponse updateBySlug(ArticleRequest articleRequest, String slug){
+        ArticleResponse articleResponse = findBySlug(slug);
+        deleteBySlug(slug);
         if (articleRequest.getTitle()!=null)
             articleResponse.setTitle(articleRequest.getTitle());
         if (articleRequest.getBody()!=null)

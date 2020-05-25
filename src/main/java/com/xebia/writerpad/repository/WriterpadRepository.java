@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface WriterpadRepository extends JpaRepository<ArticleResponse, String> {
-
+public interface WriterpadRepository extends JpaRepository<ArticleResponse, Long> {
+    ArticleResponse findBySlug(String slug);
+    String deleteBySlug(String slug);
 }

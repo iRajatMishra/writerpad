@@ -6,6 +6,8 @@ import com.xebia.writerpad.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CommentService {
     @Autowired
@@ -17,12 +19,12 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
-    public Comment findById(String slug){
-        return commentRepository.findById(slug).orElseThrow(WriterpadNotFoundException:: new);
+    public List<Comment> findBySlug(String slug){
+        return commentRepository.findBySlug(slug);
     }
 
-    public void delete(String slug){
-        commentRepository.deleteById(slug);
+    public void delete(Long id){
+        commentRepository.deleteById(id);
     }
 
 }

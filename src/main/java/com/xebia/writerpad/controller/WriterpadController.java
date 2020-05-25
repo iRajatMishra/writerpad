@@ -6,7 +6,6 @@ import com.xebia.writerpad.bean.Comment;
 import com.xebia.writerpad.service.BasicWriterpadService;
 import com.xebia.writerpad.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +28,7 @@ public class WriterpadController {
 
     @RequestMapping("/api/articles/{slug}")
     public ArticleResponse findById(@PathVariable String slug){
-        return basicWriterpadService.findById(slug);
+        return basicWriterpadService.findBySlug(slug);
     }
 
     @ResponseStatus(value = HttpStatus.CREATED)
@@ -40,13 +39,13 @@ public class WriterpadController {
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/api/articles/{slug}")
     public String deleteById(@PathVariable String slug){
-        basicWriterpadService.deleteById(slug);
+        basicWriterpadService.deleteBySlug(slug);
         return "The article has been successfully deleted";
     }
 
     @RequestMapping(method = RequestMethod.PATCH, value = "/api/articles/{slug}")
     public ArticleResponse updateById(@RequestBody ArticleRequest articleRequest,@PathVariable String slug){
-        return basicWriterpadService.updateById(articleRequest, slug);
+        return basicWriterpadService.updateBySlug(articleRequest, slug);
     }
 
     @PostMapping(path = "/api/articles/{slug}/comments", consumes = "application/json", produces = "application/json")
@@ -55,13 +54,13 @@ public class WriterpadController {
     }
 
     @RequestMapping("/api/articles/{slug}/comments")
-    public Comment findCommentsBySlug(@PathVariable String slug){
-        return commentService.findById(slug);
+    public List<Comment> findCommentsBySlug(@PathVariable String slug){
+        return commentService.findBySlug(slug);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/api/articles/{slug}/comments")
-    public String deleteCommentsBySlug(@PathVariable String slug){
-        commentService.delete(slug);
+    @RequestMapping(method = RequestMethod.DELETE, value = "/api/articles/{slug}/comments/{id}")
+    public String deleteCommentsBySlug(@PathVariable String slug, @PathVariable Long id){
+        commentService.delete(id);
         return "The comment has been successfully deleted";
     }
 

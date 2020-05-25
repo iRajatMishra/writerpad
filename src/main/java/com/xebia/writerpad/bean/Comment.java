@@ -1,9 +1,6 @@
 package com.xebia.writerpad.bean;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -11,6 +8,8 @@ import java.time.LocalDateTime;
 public class Comment {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    Long Id;
     @Column(nullable = false)
     String slug;
     @Column(nullable = false)
