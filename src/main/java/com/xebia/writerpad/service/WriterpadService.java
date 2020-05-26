@@ -54,4 +54,20 @@ public class WriterpadService implements BasicWriterpadService{
             articleResponse.setTags(articleRequest.getTags());
         return writerpadRepository.save(articleResponse);
     }
+
+    @Override
+    public List<ArticleResponse> findAllByStatus(String status) {
+        System.out.println("here"+writerpadRepository.findAllByStatus(status)+"here");
+        return writerpadRepository.findAllByStatus(status);
+    }
+
+    @Override
+    public boolean publish(String slug) {
+        ArticleResponse articleResponse = findBySlug(slug);
+        articleResponse.setStatus("PUBLISHED");
+        articleResponse = writerpadRepository.save(articleResponse);
+        if (articleResponse!=null)
+            return true;
+        return false;
+    }
 }

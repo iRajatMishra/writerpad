@@ -22,7 +22,9 @@ public class WriterpadController {
     CommentService commentService;
 
     @RequestMapping("/api/articles")
-    public List<ArticleResponse> findAll(){
+    public List<ArticleResponse> findAll(@RequestParam(required = false) String status){
+        if (status!=null)
+            return basicWriterpadService.findAllByStatus(status);
         return basicWriterpadService.findAll();
     }
 
@@ -62,6 +64,11 @@ public class WriterpadController {
     public String deleteCommentsBySlug(@PathVariable String slug, @PathVariable Long id){
         commentService.delete(id);
         return "The comment has been successfully deleted";
+    }
+
+    @PostMapping(path = "/api/articles/{slug}/PUBLISH")
+    public void publish(@PathVariable String slug){
+        boolean responseCode = basicWriterpadService.publish(slug);
     }
 
 }

@@ -12,7 +12,7 @@ public class ArticleResponse {
 
     @Id
     @Column(nullable = false)
-    UUID id;
+    private UUID id;
     @Column(nullable = false, unique = true)
     private String slug;
     @Column(nullable = false)
@@ -32,7 +32,7 @@ public class ArticleResponse {
     @Column(nullable = false)
     int favoritesCount;
     @Column(nullable = false)
-    String status;
+    private String status;
 
     public ArticleResponse(ArticleRequest articleRequest) {
         this.id = UUID.randomUUID();
