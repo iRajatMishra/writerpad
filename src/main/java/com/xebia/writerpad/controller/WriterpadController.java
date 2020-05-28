@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class WriterpadController {
@@ -75,6 +76,11 @@ public class WriterpadController {
     @GetMapping(path = "/api/articles/{slug}/timetoread")
     public TimeToRead getTimeToRead(@PathVariable String slug){
         return basicWriterpadService.getTimeToRead(slug, 3);
+    }
+
+    @GetMapping(path = "/api/articles/tags")
+    public Map<String, Integer> getTimeToRead(){
+        return basicWriterpadService.getTagOccurances();
     }
 
 }

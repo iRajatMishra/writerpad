@@ -10,7 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class WriterpadService implements BasicWriterpadService{
@@ -86,5 +88,21 @@ public class WriterpadService implements BasicWriterpadService{
         timeToRead.setArticleId(slug);
         timeToRead.setTimeToRead(time);
         return timeToRead;
+    }
+
+    @Override
+    public Map<String, Integer> getTagOccurances() {
+        Map<String, Integer> tagOccurance = new HashMap<>();
+        List<ArticleResponse> articleResponses = findAll();
+        for(ArticleResponse article:articleResponses){
+            for(String tag:article.getTags()){
+                if (tagOccurance.get(tag.toLowerCase())!=null)
+                    tagOccurance.put(tag, tagOccurance.get(tag.toLowerCase())+1);
+                else
+                    tagOccurance.put(tag.toLowerCase(), 1);
+            }
+        }
+        System.out.println(tagOccurance.toString());
+        return tagOccurance;
     }
 }
