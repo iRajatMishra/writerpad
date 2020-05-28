@@ -1,6 +1,7 @@
 package com.xebia.writerpad.service;
 
 import com.xebia.writerpad.bean.Comment;
+import com.xebia.writerpad.exception.CommentNotFoundExcepion;
 import com.xebia.writerpad.exception.WriterpadNotFoundException;
 import com.xebia.writerpad.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ public class CommentService {
     }
 
     public void delete(Long id){
+        if (commentRepository.findById(id)==null)
+            throw new CommentNotFoundExcepion();
         commentRepository.deleteById(id);
     }
 

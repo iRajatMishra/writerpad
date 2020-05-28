@@ -4,10 +4,12 @@ import com.xebia.writerpad.bean.ArticleRequest;
 import com.xebia.writerpad.bean.ArticleResponse;
 import com.xebia.writerpad.bean.Comment;
 import com.xebia.writerpad.bean.TimeToRead;
+import com.xebia.writerpad.exception.CommentNotFoundExcepion;
 import com.xebia.writerpad.service.BasicWriterpadService;
 import com.xebia.writerpad.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,8 +55,13 @@ public class WriterpadController {
     }
 
     @PostMapping(path = "/api/articles/{slug}/comments", consumes = "application/json", produces = "application/json")
-    public Comment addComment(@RequestBody Comment comment, @PathVariable String slug, HttpServletRequest httpServletRequest){
-        return commentService.save(comment, slug, httpServletRequest.getRemoteAddr());
+    public ResponseEntity<?> addComment(@RequestBody Comment comment, @PathVariable String slug, HttpServletRequest httpServletRequest){
+        ResponseEntity<?> response;
+        if (comment.getBody()==null)
+            response = ResponseEntity.badRequest().build();
+        else
+            response = ResponseEntity.status(HttpStatus.CREATED).body(commentService.save(comment, slug, httpServletRequest.getRemoteAddr()));
+        return response;
     }
 
     @RequestMapping("/api/articles/{slug}/comments")
@@ -63,9 +70,17 @@ public class WriterpadController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/api/articles/{slug}/comments/{id}")
-    public String deleteCommentsBySlug(@PathVariable String slug, @PathVariable Long id){
-        commentService.delete(id);
-        return "The comment has been successfully deleted";
+    public ResponseEntity<?> deleteCommentsBySlug(@PathVariable String slug, @PathVariable Long id){
+        ResponseEntity<?> response;
+        try {
+            commentService.delete(id);
+            response = ResponseEntity.noContent().build();
+        }
+        catch(CommentNotFoundExcepion e){
+            response = ResponseEntity.notFound().build();
+        }
+
+        return response;
     }
 
     @PostMapping(path = "/api/articles/{slug}/PUBLISH")
