@@ -3,6 +3,7 @@ package com.xebia.writerpad.controller;
 import com.xebia.writerpad.bean.ArticleRequest;
 import com.xebia.writerpad.bean.ArticleResponse;
 import com.xebia.writerpad.bean.Comment;
+import com.xebia.writerpad.bean.TimeToRead;
 import com.xebia.writerpad.service.BasicWriterpadService;
 import com.xebia.writerpad.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,11 @@ public class WriterpadController {
     @PostMapping(path = "/api/articles/{slug}/PUBLISH")
     public void publish(@PathVariable String slug){
         boolean responseCode = basicWriterpadService.publish(slug);
+    }
+
+    @GetMapping(path = "/api/articles/{slug}/timetoread")
+    public TimeToRead getTimeToRead(@PathVariable String slug){
+        return basicWriterpadService.getTimeToRead(slug, 3);
     }
 
 }

@@ -2,14 +2,14 @@ package com.xebia.writerpad.service;
 
 import com.xebia.writerpad.bean.ArticleRequest;
 import com.xebia.writerpad.bean.ArticleResponse;
-import com.xebia.writerpad.exception.WriterpadNotFoundException;
+import com.xebia.writerpad.bean.Time;
+import com.xebia.writerpad.bean.TimeToRead;
 import com.xebia.writerpad.repository.WriterpadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.util.List;
 
 @Service
@@ -43,7 +43,7 @@ public class WriterpadService implements BasicWriterpadService{
 
     public ArticleResponse updateBySlug(ArticleRequest articleRequest, String slug){
         ArticleResponse articleResponse = findBySlug(slug);
-        deleteBySlug(slug);
+//        deleteBySlug(slug);
         if (articleRequest.getTitle()!=null)
             articleResponse.setTitle(articleRequest.getTitle());
         if (articleRequest.getBody()!=null)
@@ -69,5 +69,22 @@ public class WriterpadService implements BasicWriterpadService{
         if (articleResponse!=null)
             return true;
         return false;
+    }
+
+    @Override
+    public TimeToRead getTimeToRead(String slug, int speed) {
+        ArticleResponse articleResponse = findBySlug(slug);
+        int numberOfWords = articleResponse.getBody().split(" ").length;
+        double roughTime = (double) Math.round((numberOfWords/speed) * 100) / 100;
+        System.out.println("roughTime   "+roughTime);
+        int sec = (int) (60/((roughTime - ((int)roughTime))*100));
+        System.out.println("sec "+sec);
+        Time time = new Time();
+        time.setMins((int)roughTime);
+        time.setSeconds(sec);
+        TimeToRead timeToRead = new TimeToRead();
+        timeToRead.setArticleId(slug);
+        timeToRead.setTimeToRead(time);
+        return timeToRead;
     }
 }
