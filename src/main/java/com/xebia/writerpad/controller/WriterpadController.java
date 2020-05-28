@@ -94,8 +94,14 @@ public class WriterpadController {
     }
 
     @GetMapping(path = "/api/articles/tags")
-    public Map<String, Integer> getTimeToRead(){
-        return basicWriterpadService.getTagOccurances();
+    public Map<String, Integer> getAllTagOccurrenceCounter(){
+        return basicWriterpadService.getAllTagOccurrenceCounter();
+    }
+
+    @RequestMapping("/api/articles/{slug}/favorite")
+    public ResponseEntity<?> findAll(@PathVariable String slug, @RequestParam boolean status){
+        basicWriterpadService.favoriteUnfavorite(slug, status);
+        return ResponseEntity.ok().build();
     }
 
 }

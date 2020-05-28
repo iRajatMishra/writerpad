@@ -45,7 +45,6 @@ public class WriterpadService implements BasicWriterpadService{
 
     public ArticleResponse updateBySlug(ArticleRequest articleRequest, String slug){
         ArticleResponse articleResponse = findBySlug(slug);
-//        deleteBySlug(slug);
         if (articleRequest.getTitle()!=null)
             articleResponse.setTitle(articleRequest.getTitle());
         if (articleRequest.getBody()!=null)
@@ -78,9 +77,7 @@ public class WriterpadService implements BasicWriterpadService{
         ArticleResponse articleResponse = findBySlug(slug);
         int numberOfWords = articleResponse.getBody().split(" ").length;
         double roughTime = (double) Math.round((numberOfWords/speed) * 100) / 100;
-        System.out.println("roughTime   "+roughTime);
         int sec = (int) (60/((roughTime - ((int)roughTime))*100));
-        System.out.println("sec "+sec);
         Time time = new Time();
         time.setMins((int)roughTime);
         time.setSeconds(sec);
@@ -91,7 +88,7 @@ public class WriterpadService implements BasicWriterpadService{
     }
 
     @Override
-    public Map<String, Integer> getTagOccurances() {
+    public Map<String, Integer> getAllTagOccurrenceCounter() {
         Map<String, Integer> tagOccurance = new HashMap<>();
         List<ArticleResponse> articleResponses = findAll();
         for(ArticleResponse article:articleResponses){
@@ -102,7 +99,25 @@ public class WriterpadService implements BasicWriterpadService{
                     tagOccurance.put(tag.toLowerCase(), 1);
             }
         }
-        System.out.println(tagOccurance.toString());
         return tagOccurance;
+    }
+
+    @Override
+    public void favoriteUnfavorite(String slug, boolean bool) {
+        ArticleResponse articleResponse = findBySlug(slug);
+        if (bool == true) {
+            if (!articleResponse.isFavorite())
+                articleResponse.setFavorite(true);
+            articleResponse.setFavoritesCount(articleResponse.getFavoritesCount() + 1);
+        }
+        else {
+            if (articleResponse.getFavoritesCount()<=1) {
+                articleResponse.setFavorite(false);
+                articleResponse.setFavoritesCount(0);
+            }
+            else
+                articleResponse.setFavoritesCount(articleResponse.getFavoritesCount() - 1);
+        }
+        writerpadRepository.save(articleResponse);
     }
 }

@@ -97,8 +97,16 @@ public class ArticleResponse {
         return favorite;
     }
 
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
+
     public int getFavoritesCount() {
         return favoritesCount;
+    }
+
+    public void setFavoritesCount(int favoritesCount) {
+        this.favoritesCount = favoritesCount;
     }
 
     public String getStatus() {
