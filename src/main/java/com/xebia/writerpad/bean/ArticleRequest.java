@@ -32,4 +32,5 @@ public class ArticleRequest {
     public String[] getTags() {
         return tags;
     }
+
 }

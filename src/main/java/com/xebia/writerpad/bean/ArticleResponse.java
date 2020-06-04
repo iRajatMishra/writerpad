@@ -33,6 +33,8 @@ public class ArticleResponse {
     int favoritesCount;
     @Column(nullable = false)
     private String status;
+    @Column(nullable = false)
+    private String authorUsername;
 
     public ArticleResponse(ArticleRequest articleRequest) {
         this.id = UUID.randomUUID();
@@ -142,6 +144,16 @@ public class ArticleResponse {
         this.status = status;
     }
 
+    public Author getAuthorUsername() {
+        Author author = new Author();
+        author.setName(authorUsername);
+        return author;
+    }
+
+    public void setAuthorUsername(String authorUsername) {
+        this.authorUsername = authorUsername;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -157,19 +169,4 @@ public class ArticleResponse {
         return result;
     }
 
-    @Override
-    public String toString() {
-        return "ArticleResponse{" +
-                "id=" + id +
-                ", slug='" + slug + '\'' +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", body='" + body + '\'' +
-                ", tags=" + Arrays.toString(tags) +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", favorite=" + favorite +
-                ", favoritesCount=" + favoritesCount +
-                '}';
-    }
 }

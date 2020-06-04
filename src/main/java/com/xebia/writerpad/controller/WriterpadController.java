@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -39,19 +41,42 @@ public class WriterpadController {
 
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping(path = "/api/articles", consumes = "application/json", produces = "application/json")
-    public ArticleResponse addWriterpad(@RequestBody ArticleRequest articleRequest){
-        return basicWriterpadService.save(articleRequest);
+    public ArticleResponse create(@RequestBody ArticleRequest articleRequest, @RequestHeader(value="Authorization") String authorization){
+        String base64Credentials = authorization.substring("Basic".length()).trim();
+        byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
+        String credentials = new String(credDecoded, StandardCharsets.UTF_8);
+        final String[] values = credentials.split(":", 2);
+        return basicWriterpadService.save(articleRequest, values[0]);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/api/articles/{slug}")
-    public String deleteById(@PathVariable String slug){
-        basicWriterpadService.deleteBySlug(slug);
-        return "The article has been successfully deleted";
+    public ResponseEntity<?> deleteById(@PathVariable String slug, @RequestHeader(value="Authorization") String authorization){
+        ResponseEntity<?> response;
+        String base64Credentials = authorization.substring("Basic".length()).trim();
+        byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
+        String credentials = new String(credDecoded, StandardCharsets.UTF_8);
+        final String[] values = credentials.split(":", 2);
+        String result = basicWriterpadService.deleteBySlug(slug, values);
+        if(result==null)
+            response = ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        else
+            response = ResponseEntity.ok().body(result);
+        return response;
     }
 
     @RequestMapping(method = RequestMethod.PATCH, value = "/api/articles/{slug}")
-    public ArticleResponse updateById(@RequestBody ArticleRequest articleRequest,@PathVariable String slug){
-        return basicWriterpadService.updateBySlug(articleRequest, slug);
+    public ResponseEntity<?> updateById(@RequestBody ArticleRequest articleRequest,@PathVariable String slug, @RequestHeader(value="Authorization") String authorization){
+        ResponseEntity<?> response;
+        String base64Credentials = authorization.substring("Basic".length()).trim();
+        byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
+        String credentials = new String(credDecoded, StandardCharsets.UTF_8);
+        final String[] values = credentials.split(":", 2);
+        ArticleResponse articleResponse= basicWriterpadService.updateBySlug(articleRequest, slug, values);
+        if(articleResponse==null)
+            response = ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        else
+            response = ResponseEntity.ok().body(articleResponse);
+        return response;
     }
 
     @PostMapping(path = "/api/articles/{slug}/comments", consumes = "application/json", produces = "application/json")

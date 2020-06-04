@@ -44,17 +44,26 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.apache.maven.plugins</groupId>-->
+<!--			<artifactId>maven-checkstyle-plugin</artifactId>-->
+<!--			<version>3.1.1</version>-->
+<!--			<type>maven-plugin</type>-->
+<!--		</dependency>-->
+<!--		&lt;!&ndash; https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-maven-plugin &ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>com.github.spotbugs</groupId>-->
+<!--			<artifactId>spotbugs-maven-plugin</artifactId>-->
+<!--			<version>3.1.0-RC6</version>-->
+<!--		</dependency>-->
 		<dependency>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-checkstyle-plugin</artifactId>
-			<version>3.1.1</version>
-			<type>maven-plugin</type>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-maven-plugin -->
 		<dependency>
-			<groupId>com.github.spotbugs</groupId>
-			<artifactId>spotbugs-maven-plugin</artifactId>
-			<version>3.1.0-RC6</version>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

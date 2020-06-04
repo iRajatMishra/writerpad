@@ -1,9 +1,6 @@
 package com.xebia.writerpad.service;
 
-import com.xebia.writerpad.bean.ArticleRequest;
-import com.xebia.writerpad.bean.ArticleResponse;
-import com.xebia.writerpad.bean.Time;
-import com.xebia.writerpad.bean.TimeToRead;
+import com.xebia.writerpad.bean.*;
 import com.xebia.writerpad.repository.WriterpadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,18 +30,24 @@ public class WriterpadService implements BasicWriterpadService{
     }
 
     @Override
-    public ArticleResponse save(ArticleRequest articleRequest) {
+    public ArticleResponse save(ArticleRequest articleRequest, String username) {
         ArticleResponse articleResponse = new ArticleResponse(articleRequest);
+        articleResponse.setAuthorUsername(username);
         return writerpadRepository.save(articleResponse);
     }
 
     @Override
-    public void deleteBySlug(String slug) {
-        writerpadRepository.deleteBySlug(slug);
+    public String deleteBySlug(String slug, String[] login) {
+        ArticleResponse articleResponse = findBySlug(slug);
+        if (!articleResponse.getAuthorUsername().getName().equals(login[0]))
+            return null;
+        return writerpadRepository.deleteBySlug(slug);
     }
 
-    public ArticleResponse updateBySlug(ArticleRequest articleRequest, String slug){
+    public ArticleResponse updateBySlug(ArticleRequest articleRequest, String slug, String[] login){
         ArticleResponse articleResponse = findBySlug(slug);
+        if (!articleResponse.getAuthorUsername().getName().equals(login[0]))
+            return null;
         if (articleRequest.getTitle()!=null)
             articleResponse.setTitle(articleRequest.getTitle());
         if (articleRequest.getBody()!=null)
@@ -58,7 +61,6 @@ public class WriterpadService implements BasicWriterpadService{
 
     @Override
     public List<ArticleResponse> findAllByStatus(String status) {
-        System.out.println("here"+writerpadRepository.findAllByStatus(status)+"here");
         return writerpadRepository.findAllByStatus(status);
     }
 

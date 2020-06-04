@@ -11,9 +11,9 @@ public interface BasicWriterpadService {
 
     public List<ArticleResponse> findAll();
     public ArticleResponse findBySlug(String slug);
-    public ArticleResponse save(ArticleRequest articleRequest);
-    public void deleteBySlug(String slug);
-    public ArticleResponse updateBySlug(ArticleRequest articleRequest, String slug);
+    public ArticleResponse save(ArticleRequest articleRequest, String username);
+    public String deleteBySlug(String slug, String[] login);
+    public ArticleResponse updateBySlug(ArticleRequest articleRequest, String slug, String[] login);
     List<ArticleResponse> findAllByStatus(String status);
     public boolean publish(String slug);
     public TimeToRead getTimeToRead(String slug, int speed);

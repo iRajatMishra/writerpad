@@ -12,6 +12,5 @@ import java.util.List;
 public interface WriterpadRepository extends JpaRepository<ArticleResponse, Long> {
     ArticleResponse findBySlug(String slug);
     String deleteBySlug(String slug);
-//    @Query("select * from articles where status")
     List<ArticleResponse> findAllByStatus(String status);
 }
