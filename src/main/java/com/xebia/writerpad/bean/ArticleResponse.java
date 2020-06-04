@@ -35,6 +35,8 @@ public class ArticleResponse {
     private String status;
     @Column(nullable = false)
     private String authorUsername;
+    @Column(nullable = false)
+    private String image;
 
     public ArticleResponse(ArticleRequest articleRequest) {
         this.id = UUID.randomUUID();
@@ -48,6 +50,7 @@ public class ArticleResponse {
         this.favorite = false;
         this.favoritesCount = 0;
         this.status = "DRAFT";
+        this.image = "https://source.unsplash.com/random?sig="+getRandomNumber();
     }
 
     public ArticleResponse() {
@@ -124,6 +127,10 @@ public class ArticleResponse {
         setSlug();
     }
 
+    private double getRandomNumber() {
+        return (Math.floor(Math.random()*10));
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }
@@ -152,6 +159,10 @@ public class ArticleResponse {
 
     public void setAuthorUsername(String authorUsername) {
         this.authorUsername = authorUsername;
+    }
+
+    public String getImage() {
+        return image;
     }
 
     @Override
