@@ -122,4 +122,7 @@ public class WriterpadService implements BasicWriterpadService{
         }
         writerpadRepository.save(articleResponse);
     }
+
+
+
 }

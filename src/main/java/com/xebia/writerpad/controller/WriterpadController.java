@@ -1,12 +1,11 @@
 package com.xebia.writerpad.controller;
 
-import com.xebia.writerpad.bean.ArticleRequest;
-import com.xebia.writerpad.bean.ArticleResponse;
-import com.xebia.writerpad.bean.Comment;
-import com.xebia.writerpad.bean.TimeToRead;
+import com.xebia.writerpad.bean.*;
 import com.xebia.writerpad.exception.CommentNotFoundExcepion;
 import com.xebia.writerpad.service.BasicWriterpadService;
 import com.xebia.writerpad.service.CommentService;
+import com.xebia.writerpad.service.UserService;
+import org.graalvm.compiler.lir.LIRInstruction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +21,13 @@ import java.util.Map;
 public class WriterpadController {
 
     @Autowired
-    BasicWriterpadService basicWriterpadService;
+    private BasicWriterpadService basicWriterpadService;
 
     @Autowired
-    CommentService commentService;
+    private CommentService commentService;
+
+    @Autowired
+    private UserService userService;
 
     @RequestMapping("/api/articles")
     public List<ArticleResponse> findAll(@RequestParam(required = false) String status){
@@ -127,6 +129,24 @@ public class WriterpadController {
     public ResponseEntity<?> findAll(@PathVariable String slug, @RequestParam boolean status){
         basicWriterpadService.favoriteUnfavorite(slug, status);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(path = "/api/profiles/{username}/follow")
+    public User follow(@PathVariable String username, @RequestHeader(value="Authorization") String authorization){
+        String base64Credentials = authorization.substring("Basic".length()).trim();
+        byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
+        String credentials = new String(credDecoded, StandardCharsets.UTF_8);
+        final String[] values = credentials.split(":", 2);
+        return userService.follow(username, values[0]);
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, path = "/api/profiles/{username}/follow")
+    public User unfollow(@PathVariable String username, @RequestHeader(value="Authorization") String authorization){
+        String base64Credentials = authorization.substring("Basic".length()).trim();
+        byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
+        String credentials = new String(credDecoded, StandardCharsets.UTF_8);
+        final String[] values = credentials.split(":", 2);
+        return userService.unfollow(username, values[0]);
     }
 
 }
